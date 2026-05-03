@@ -1,42 +1,30 @@
-# Claude Code `.claude` Folder — Presentation
+# md-presentation
 
-A zero-dependency browser presentation about Claude Code's `.claude` folder system.
+A zero-dependency markdown presentation tool that runs in the browser.
 
-Built with the same `.claude` setup it teaches.
+Write slides as `.md` files. Open `index.html`. Present.
 
-**Live:** https://nivkman.github.io/md-presentation/
-
-## What it covers
-
-- CLAUDE.md — permanent memory across sessions
-- settings.json — permissions, behavior, and MCP connections
-- Scopes — project vs user-level config
-- Agents — built-in and custom autonomous workers
-- Skills — reusable team workflows
-- Commands — slash-triggered automations
-- MCPs — external connections (GitHub, Slack, databases)
-- Hooks — rules that enforce themselves
-- Real-world session walkthroughs across engineering, product, and QA roles
+**Live demo:** https://nivkman.github.io/md-presentation/
 
 ## How to use
 
-Open `index.html` in a browser. No server needed.
+1. Write slides as `.md` files in `slides/`
+2. Run `node build.js` to compile them into `slides.js`
+3. Open `index.html` in a browser
 
-Navigate with arrow keys or click the left/right edges of the screen.
+No server. No dependencies. No build tools for the viewer.
 
-## How it works
+Navigate with arrow keys or click left/right to advance.
+
+## How slides work
 
 - Each file in `slides/` is one slide
-- Files are sorted alphabetically — numbering controls order (`01-`, `02-`, `10b-`, etc.)
-- Run `node build.js` to regenerate `slides.js` after editing slides
-- `index.html` renders everything — no dependencies, no build step for the viewer
+- Files are sorted alphabetically — use numeric prefixes to control order (`01-`, `02-`, `10b-`, etc.)
+- Slides are separated by `\n---\n` when compiled
+- Supported markdown: headings, bullet lists, bold, italic, inline code, fenced code blocks
 
-## Live Q&A
+## Demo content
 
-If you have Claude Code installed, open this project and run:
+The slides in this repo present Claude Code's `.claude` folder system — agents, skills, hooks, commands, MCPs, and real-world session walkthroughs.
 
-```
-/claude-q&a
-```
-
-Claude will read every slide and answer audience questions with full presentation context.
+It's a real use case, built with the tool it demonstrates.
