@@ -215,8 +215,8 @@
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
   html = html.replace(/`(.+?)`/g, '<code>$1</code>');
 
-  // Paragraphs: non-empty lines not already wrapped in a tag
-  html = html.replace(/^(?!<[a-z]).+$/gm, line =>
+  // Paragraphs: non-empty lines not already wrapped in a block-level tag
+  html = html.replace(/^(?!<(?:h[1-6]|ul|ol|pre|blockquote|li)).+$/gm, line =>
     line.trim() ? `<p>${line.trim()}</p>` : ''
   );
 
