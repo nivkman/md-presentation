@@ -250,6 +250,33 @@
   assert('fenced code', parseMarkdown('```\nfoo()\n```'), '<pre><code>foo()</code></pre>');
   assert('paragraph', parseMarkdown('hello world'), '<p>hello world</p>');
 })();
+
+  const deck = document.getElementById('deck');
+  const counter = document.getElementById('counter');
+  let current = 0;
+  let slides = [];
+
+  function renderSlides() {
+    const rawSlides = SLIDES.split(/\n---\n/).map(s => s.trim()).filter(Boolean);
+    slides = rawSlides;
+
+    deck.innerHTML = '';
+    rawSlides.forEach((raw, i) => {
+      const div = document.createElement('div');
+      div.className = 'slide' + (i === 0 ? ' active' : '');
+      div.innerHTML = `<div class="accent-line"></div><div class="slide-content">${parseMarkdown(raw)}</div>`;
+      deck.appendChild(div);
+    });
+
+    updateCounter();
+  }
+
+  function updateCounter() {
+    const pad = n => String(n).padStart(2, '0');
+    counter.textContent = `${pad(current + 1)} / ${pad(slides.length)}`;
+  }
+
+  renderSlides();
   </script>
 </body>
 </html>
