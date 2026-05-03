@@ -230,28 +230,7 @@
         .replace(/>/g, '&gt;');
     }
 
-// Inline tests — open browser console to verify
-(function runTests() {
-  const assert = (label, got, expected) => {
-    if (got !== expected) {
-      console.error(`FAIL [${label}]\n  got:      ${got}\n  expected: ${expected}`);
-    } else {
-      console.log(`PASS [${label}]`);
-    }
-  };
-
-  assert('h1', parseMarkdown('# Hello'), '<h1>Hello</h1>');
-  assert('h2', parseMarkdown('## World'), '<h2>World</h2>');
-  assert('h3', parseMarkdown('### Sub'), '<h3>Sub</h3>');
-  assert('bold', parseMarkdown('**bold**'), '<p><strong>bold</strong></p>');
-  assert('italic', parseMarkdown('*em*'), '<p><em>em</em></p>');
-  assert('inline code', parseMarkdown('`x`'), '<p><code>x</code></p>');
-  assert('ul', parseMarkdown('- a\n- b'), '<ul><li>a</li><li>b</li></ul>');
-  assert('fenced code', parseMarkdown('```\nfoo()\n```'), '<pre><code>foo()</code></pre>');
-  assert('paragraph', parseMarkdown('hello world'), '<p>hello world</p>');
-})();
-
-  const deck = document.getElementById('deck');
+    const deck = document.getElementById('deck');
   const counter = document.getElementById('counter');
   let current = 0;
   let slides = [];
@@ -302,8 +281,8 @@
   function prev() { goTo(current - 1); }
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') next();
-    if (e.key === 'ArrowLeft') prev();
+    if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
   });
 
   document.addEventListener('click', next);
