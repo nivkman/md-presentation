@@ -4,6 +4,8 @@ A zero-dependency browser presentation about Claude Code's `.claude` folder syst
 
 Built with the same `.claude` setup it teaches.
 
+**Live:** https://nivkman.github.io/md-presentation/
+
 ## What it covers
 
 - CLAUDE.md — permanent memory across sessions
