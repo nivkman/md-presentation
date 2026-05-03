@@ -189,7 +189,67 @@
 
   <script src="slides.js"></script>
   <script>
-    // JS goes here in Task 3
+    function parseMarkdown(text) {
+  let html = text.trim();
+
+  // Fenced code blocks (must run before inline code)
+  html = html.replace(/```[\w]*\n?([\s\S]*?)```/g, (_, code) =>
+    `<pre><code>${escapeHtml(code.trim())}</code></pre>`
+  );
+
+  // Headings
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+  // Unordered lists (group consecutive - lines)
+  html = html.replace(/(^- .+(\n|$))+/gm, match => {
+    const items = match.trim().split('\n').map(line =>
+      `<li>${line.replace(/^- /, '').trim()}</li>`
+    ).join('');
+    return `<ul>${items}</ul>`;
+  });
+
+  // Inline: bold, italic, inline code
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  html = html.replace(/`(.+?)`/g, '<code>$1</code>');
+
+  // Paragraphs: non-empty lines not already wrapped in a tag
+  html = html.replace(/^(?!<[a-z]).+$/gm, line =>
+    line.trim() ? `<p>${line.trim()}</p>` : ''
+  );
+
+  return html;
+}
+
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// Inline tests — open browser console to verify
+(function runTests() {
+  const assert = (label, got, expected) => {
+    if (got !== expected) {
+      console.error(`FAIL [${label}]\n  got:      ${got}\n  expected: ${expected}`);
+    } else {
+      console.log(`PASS [${label}]`);
+    }
+  };
+
+  assert('h1', parseMarkdown('# Hello'), '<h1>Hello</h1>');
+  assert('h2', parseMarkdown('## World'), '<h2>World</h2>');
+  assert('h3', parseMarkdown('### Sub'), '<h3>Sub</h3>');
+  assert('bold', parseMarkdown('**bold**'), '<p><strong>bold</strong></p>');
+  assert('italic', parseMarkdown('*em*'), '<p><em>em</em></p>');
+  assert('inline code', parseMarkdown('`x`'), '<p><code>x</code></p>');
+  assert('ul', parseMarkdown('- a\n- b'), '<ul><li>a</li><li>b</li></ul>');
+  assert('fenced code', parseMarkdown('```\nfoo()\n```'), '<pre><code>foo()</code></pre>');
+  assert('paragraph', parseMarkdown('hello world'), '<p>hello world</p>');
+})();
   </script>
 </body>
 </html>
