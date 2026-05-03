@@ -277,6 +277,36 @@
   }
 
   renderSlides();
+
+  function goTo(index) {
+    if (index < 0 || index >= slides.length) return;
+
+    const allSlides = deck.querySelectorAll('.slide');
+
+    // Mark current as leaving
+    allSlides[current].classList.remove('active');
+    allSlides[current].classList.add('leaving');
+
+    // After transition, remove leaving class
+    const leaving = allSlides[current];
+    leaving.addEventListener('transitionend', () => {
+      leaving.classList.remove('leaving');
+    }, { once: true });
+
+    current = index;
+    allSlides[current].classList.add('active');
+    updateCounter();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+
+  document.addEventListener('click', next);
   </script>
 </body>
 </html>
