@@ -231,61 +231,61 @@
     }
 
     const deck = document.getElementById('deck');
-  const counter = document.getElementById('counter');
-  let current = 0;
-  let slides = [];
+    const counter = document.getElementById('counter');
+    let current = 0;
+    let slides = [];
 
-  function renderSlides() {
-    const rawSlides = SLIDES.split(/\n---\n/).map(s => s.trim()).filter(Boolean);
-    slides = rawSlides;
+    function renderSlides() {
+      const rawSlides = SLIDES.split(/\n---\n/).map(s => s.trim()).filter(Boolean);
+      slides = rawSlides;
 
-    deck.innerHTML = '';
-    rawSlides.forEach((raw, i) => {
-      const div = document.createElement('div');
-      div.className = 'slide' + (i === 0 ? ' active' : '');
-      div.innerHTML = `<div class="accent-line"></div><div class="slide-content">${parseMarkdown(raw)}</div>`;
-      deck.appendChild(div);
+      deck.innerHTML = '';
+      rawSlides.forEach((raw, i) => {
+        const div = document.createElement('div');
+        div.className = 'slide' + (i === 0 ? ' active' : '');
+        div.innerHTML = `<div class="accent-line"></div><div class="slide-content">${parseMarkdown(raw)}</div>`;
+        deck.appendChild(div);
+      });
+
+      updateCounter();
+    }
+
+    function updateCounter() {
+      const pad = n => String(n).padStart(2, '0');
+      counter.textContent = `${pad(current + 1)} / ${pad(slides.length)}`;
+    }
+
+    renderSlides();
+
+    function goTo(index) {
+      if (index < 0 || index >= slides.length) return;
+
+      const allSlides = deck.querySelectorAll('.slide');
+
+      // Mark current as leaving
+      allSlides[current].classList.remove('active');
+      allSlides[current].classList.add('leaving');
+
+      // After transition, remove leaving class
+      const leaving = allSlides[current];
+      leaving.addEventListener('transitionend', () => {
+        leaving.classList.remove('leaving');
+      }, { once: true });
+
+      current = index;
+      allSlides[current].classList.add('active');
+      updateCounter();
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
     });
 
-    updateCounter();
-  }
-
-  function updateCounter() {
-    const pad = n => String(n).padStart(2, '0');
-    counter.textContent = `${pad(current + 1)} / ${pad(slides.length)}`;
-  }
-
-  renderSlides();
-
-  function goTo(index) {
-    if (index < 0 || index >= slides.length) return;
-
-    const allSlides = deck.querySelectorAll('.slide');
-
-    // Mark current as leaving
-    allSlides[current].classList.remove('active');
-    allSlides[current].classList.add('leaving');
-
-    // After transition, remove leaving class
-    const leaving = allSlides[current];
-    leaving.addEventListener('transitionend', () => {
-      leaving.classList.remove('leaving');
-    }, { once: true });
-
-    current = index;
-    allSlides[current].classList.add('active');
-    updateCounter();
-  }
-
-  function next() { goTo(current + 1); }
-  function prev() { goTo(current - 1); }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
-  });
-
-  document.addEventListener('click', next);
+    document.addEventListener('click', next);
   </script>
 </body>
 </html>
